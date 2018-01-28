@@ -42,11 +42,16 @@ opacity: .9;
   padding: 3em;
 }
 
+#domain {
+  width: 80%;
+}
+
 #ret {
   width: 80%;
   margin: 0 auto;
-  padding: 1em;
+  padding: 2em;
   background: #EBDECB;
+  color: #000;
 }
 
 </style>
@@ -83,10 +88,9 @@ $('#go').click(function () {
   $.get( "/register?n=" + d, function( data ) {
   //$( ".result" ).html( data );
   console.log(data);
-
   $('#res').html('<br/><div id="ret"></div>');
   $('#ret').append('<h3>' + d + '</h3><hr>');
-  $('#ret').append('<br/>Call callABI: <pre>' + data.callABI + '</pre>');
+  $('#ret').append('<br/>ABI: <pre>' + data.callABI + '</pre>');
   $('#ret').append('<br/>Account:  <pre>' + data.account + '</pre>');
   // $('#ret').append('<br/>Contract Address: <pre>' + data.contractAddress + '</pre>');
   // $('#ret').append('<br/>Gass Price: <pre>' + data.gassPrice + '</pre>');
