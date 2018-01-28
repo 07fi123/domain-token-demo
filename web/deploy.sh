@@ -1,3 +1,4 @@
+# heroku login
 git add .
 git commit -m 'deploy.sh'
 git push origin master
