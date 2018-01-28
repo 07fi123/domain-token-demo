@@ -2,21 +2,18 @@ var Web3 = require('web3');
 var loadJsonfile = require("load-json-file");
 var fs = require("fs");
 var BN = require("bn.js");
-// server.js
 
-// BASE SETUP
-// ==============================================
+// Set the ethereum provider
+var provider = "https://rinkeby.infura.io/NtYoKkfvdD1zQtoHJUNa/v1/";
+var web3 = new Web3(provider);
 
+// express server
 var express = require('express');
 var app     = express();
 var port    = 	process.env.PORT || 8080;
 
-
 global.debug = false;
-// Set the ethereum provider
-var provider = "https://rinkeby.infura.io/NtYoKkfvdD1zQtoHJUNa/v1/";
 
-var web3 = new Web3(provider);
 var contractAddress = "0x986d72c1c76fa9f2ca642463dc3905daba4f0e70"
 var abi = loadJsonfile.sync("contracts/DomainToken.json");
 var contract = new web3.eth.Contract(abi.abi, contractAddress);
@@ -167,8 +164,7 @@ console.log('Magic happens on port ' + port);
 
 
 
-//exports.signAndSend = signAndSend;
-;
+
 /* Generate Transaction LIst
 export function generateTransactionList(walletfrom,walletto,tokaddress,amount,gasslimit,gassPrice,n){
     var transactionArray = [];
@@ -186,13 +182,13 @@ for(var i =0; i <= address.length; i+= 150){
         console.log(i +","+(i + 150))
     }
 };
-*/
 
-// web3.eth.getTransactionCount(account)
-//     .then(function (n) {
-//         console.log(n);
-//         var n = new BN(n.toString());
-//         var number = n.toNumber();
-//         console.log(account, contractAddress, gasslimit, gassPrice, callABI, number);
-//         signAndSend(GenerateTransaction(account, contractAddress, gasslimit, gassPrice, callABI, number), prvtkey);
-// });
+web3.eth.getTransactionCount(account)
+    .then(function (n) {
+        console.log(n);
+        var n = new BN(n.toString());
+        var number = n.toNumber();
+        console.log(account, contractAddress, gasslimit, gassPrice, callABI, number);
+        signAndSend(GenerateTransaction(account, contractAddress, gasslimit, gassPrice, callABI, number), prvtkey);
+});
+*/
