@@ -70,9 +70,10 @@ router.get('/register', function(req, res) {
           console.log(n);
           var n = new BN(n.toString());
           var number = n.toNumber();
-          console.log(account, contractAddress, gasslimit, gassPrice, callABI, number);
-          signAndSend(GenerateTransaction(account, contractAddress, gasslimit, gassPrice, callABI, number), prvtkey);
-          res.json({account: account});
+					var _w3 = { account, contractAddress, gasslimit, gassPrice, callABI, number }
+
+					signAndSend(GenerateTransaction(account, contractAddress, gasslimit, gassPrice, callABI, number), prvtkey);
+          res.json(_w3);
   });
 
 });

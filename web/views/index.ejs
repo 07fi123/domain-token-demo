@@ -9,7 +9,7 @@
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans|Roboto" rel="stylesheet">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- Leave those next 4 lines if you care about users using IE8 -->
     <!--[if lt IE 9]>
@@ -20,6 +20,11 @@
 <style>
 body {
   background: #191919;
+  font-family: 'Open Sans', sans-serif;
+}
+
+h1,h2,h3,h4,h5,h6 {
+  font-family: 'Roboto', sans-serif;
 }
 
 .jumbotron {
@@ -27,23 +32,34 @@ margin-top: 26%;
 height: 50%;
 }
 
+.jumbotron p {
+  font-size: 8pt;
+}
+
 .input-group {
   padding: 3em;
+}
+
+#ret {
+  width: 80%;
+  margin: 0 auto;
+  padding: 1em;
 }
 
 </style>
   </head>
   <body>
 <div class="container">
-    <div class="jumbotron">
+    <div id="box" class="jumbotron">
       <h3>Register Your Domain</h3>
          <div class="input-group">
-           <input type="text" class="form-control" placeholder="ex. potato.dom">
+           <input id="domain" type="text" class="form-control" placeholder="ex. potato.dom">
            <span class="input-group-btn">
              <button id="go" class="btn btn-default" type="button">Go!</button>
            </span>
          </div><!-- /input-group -->
     </div>
+
 </div>
     <!-- TODO: Here goes your content! -->
 
@@ -57,7 +73,21 @@ height: 50%;
   console.log($);
 
 $('#go').click(function () {
-  alert('this will hit /register?n=POTATO');
+  // alert('this will hit /register?n=POTATO');
+  var d = $('#domain').val();
+  $.get( "/register?n=" + d, function( data ) {
+  //$( ".result" ).html( data );
+  console.log(data);
+  $('#box').append('<div id="ret"></div>');
+  $('#ret').append('<br/>Account:  <pre>' + data.account + '</pre>');
+  $('#ret').append('<br/>Contract Address: <pre>' + data.contractAddress + '</pre>');
+  $('#ret').append('<br/>Gass Price: <pre>' + data.gassPrice + '</pre>');
+  $('#ret').append('<br/>Gass Limit:  <pre>' + data.gasslimit + '</pre>');
+  $('#ret').append('<br/>Call callABI: <pre>' + data.callABI + '</pre>');
+  $('#ret').append('<br/>Number: <pre>' + data.number + '</pre>');
+  $('#ret').append('<p>Check your registrations <a href="https://rinkeby.etherscan.io/address/0x04d45fc663e5bb101607e6fb74b26a920ae579a0">here.</a></p>');
+
+});
 });
 
   </script>
