@@ -10,7 +10,8 @@ var web3 = new Web3(provider);
 var contractAddress = "0x986d72c1c76fa9f2ca642463dc3905daba4f0e70"
 var abi = loadJsonfile.sync("contracts/DomainToken.json");
 var contract = new web3.eth.Contract(abi.abi, contractAddress);
-var callABI = contract.methods.register(web3.utils.toHex("mitch.dom")).encodeABI();
+
+var callABI = contract.methods.setEndpoint(web3.utils.toHex("austin.dom"),web3.utils.toHex("196.1.3.1")).encodeABI();
 console.log(callABI);
 
 function GenerateTransaction(account, contractAddress, gasslimit, gassPrice, callABI, n) {
