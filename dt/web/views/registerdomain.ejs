@@ -27,14 +27,10 @@ h1,h2,h3,h4,h5,h6 {
   font-family: 'Roboto', sans-serif;
 }
 
-#logo {
-  float: left;
-  width: 13em;
-}
-
 .jumbotron {
 background: #fff;
 margin-top: 26%;
+height: 50%;
 opacity: .9;
 }
 
@@ -63,13 +59,11 @@ opacity: .9;
   <body>
 <div class="container">
     <div id="box" class="jumbotron">
-<img id="logo" src="http://www.domaintoken.io/wp-content/uploads/2017/12/Domain-Token-Logofull.png"/>
-
+      <h3>Register Your Domain</h3>
          <div class="input-group">
-           <!-- <input id="domain" type="text" class="form-control" placeholder="ex. potato.dom"> -->
+           <input id="domain" type="text" class="form-control" placeholder="ex. potato.dom">
            <span class="input-group-btn">
-             <button id="go" class="btn btn-default" type="button">Register A Domain</button>
-              <button id="go" class="btn btn-default" type="button">Set Endpoint</button>
+             <button id="go" class="btn btn-default" type="button">Go!</button>
            </span>
 
          </div><!-- /input-group -->
@@ -89,25 +83,36 @@ opacity: .9;
   console.log($);
 
 $('#go').click(function () {
-  window.location.href = '/registerdomain';
   // alert('this will hit /register?n=POTATO');
-  // var d = $('#domain').val();
-  // $.get( "/register?n=" + d, function( data ) {
-  // //$( ".result" ).html( data );
-  // console.log(data);
-  // $('#res').html('<br/><div id="ret"></div>');
-  // $('#ret').append('<h5>' + d + '</h5><hr>');
-  // $('#ret').append('<br/>Hash: <pre>' + data + '</pre>');
-  // // $('#ret').append('<br/>Account:  <pre>' + data.account + '</pre>');
-  // // $('#ret').append('<br/>Contract Address: <pre>' + data.contractAddress + '</pre>');
-  // // $('#ret').append('<br/>Gass Price: <pre>' + data.gassPrice + '</pre>');
-  // // $('#ret').append('<br/>Gass Limit:  <pre>' + data.gasslimit + '</pre>');
-  // // $('#ret').append('<br/>Number: <pre>' + data.number + '</pre>');
-  // $('#box').append('<p></p>');
-  // $('#box').append('<p></p>');
-  // $('#ret').append('<p>Check your registrations <a href="https://rinkeby.etherscan.io/address/0x04d45fc663e5bb101607e6fb74b26a920ae579a0">here.</a></p>');
-  // $('#box').append('<p></p>');
-// });
+  var d = $('#domain').val();
+  function isValidDomain(v) {
+  if (!v) return false;
+  var re = /^(?!:\/\/)([a-zA-Z0-9-]+\.){0,5}[a-zA-Z0-9-][a-zA-Z0-9-]+\.[a-zA-Z]{2,64}?$/gi;
+  return re.test(v);
+}
+
+if (isValidDomain(d)) {
+  $.get( "/register?n=" + d, function( data ) {
+  //$( ".result" ).html( data );
+  console.log(data);
+  $('#res').html('<br/><div id="ret"></div>');
+  $('#ret').append('<h5>' + d + '</h5><hr>');
+  $('#ret').append('<br/>Hash: <pre>' + data + '</pre>');
+  // $('#ret').append('<br/>Account:  <pre>' + data.account + '</pre>');
+  // $('#ret').append('<br/>Contract Address: <pre>' + data.contractAddress + '</pre>');
+  // $('#ret').append('<br/>Gass Price: <pre>' + data.gassPrice + '</pre>');
+  // $('#ret').append('<br/>Gass Limit:  <pre>' + data.gasslimit + '</pre>');
+  // $('#ret').append('<br/>Number: <pre>' + data.number + '</pre>');
+  $('#box').append('<p></p>');
+  $('#box').append('<p></p>');
+  $('#ret').append('<p>Check your registrations <a href="https://rinkeby.etherscan.io/address/0x04d45fc663e5bb101607e6fb74b26a920ae579a0">here.</a></p>');
+  $('#box').append('<p></p>');
+});
+}
+else {
+  alert(d + ' is not a valid name.');
+}
+
 });
 
   </script>
