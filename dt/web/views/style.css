@@ -1,0 +1,38 @@
+body {
+  background: #191919;
+  font-family: 'Open Sans', sans-serif;
+}
+
+h1,h2,h3,h4,h5,h6 {
+  font-family: 'Roboto', sans-serif;
+}
+
+.logo {
+  width: 13em;
+}
+
+.jumbotron {
+background: #fff;
+margin-top: 26%;
+opacity: .9;
+}
+
+.jumbotron p {
+  font-size: 8pt;
+}
+
+.input-group {
+  padding: 3em;
+}
+
+#domain {
+  width: 80%;
+}
+
+#ret {
+  width: 80%;
+  margin: 0 auto;
+  padding: 2em;
+  background: #EBDECB;
+  color: #000;
+}
