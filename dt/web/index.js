@@ -64,6 +64,19 @@ var dt = {
 						dt.signAndSend(dt.GenerateTransaction(account, contractAddress, gasslimit, gassPrice, callABI, number), prvtkey);
 		});
 	},
+	setEndpoint: function (domname, endpoint) {
+		// var callABI = contract.methods.register(web3.utils.toHex(domname)).encodeABI();
+		// let endpoint = '100.' + Math.random(200) + '.100.' + '0.1';
+		var callABI = contract.methods.setEndpoint(web3.utils.toHex(domname),web3.utils.toHex(endpoint)).encodeABI();
+		web3.eth.getTransactionCount(dt.config.account)
+				.then(function (n) {
+						console.log(n);
+						var n = new BN(n.toString());
+						var number = n.toNumber();
+						// var _w3 = { dt.config.account, dt.config.contractAddress, dt.config.gasslimit, dt,.config gassPrice, callABI, number }
+						dt.signAndSend(dt.GenerateTransaction(account, contractAddress, gasslimit, gassPrice, callABI, number), prvtkey);
+		});
+	},
 	//Sign and send transactions
 	signAndSend: function (transactionObj, prvtkey) {
 	    web3.eth.accounts.signTransaction(transactionObj, prvtkey).then(function (tx) {
@@ -143,6 +156,17 @@ router.get('/register', function(req, res) {
   let domname = req.query.n;
 	dt.register(domname);
 });
+
+router.get('/setend', function(req, res) {
+  //console.log(Object.keys(req))
+	dt.res = res;
+	console.log(req.query)
+  let domname = req.query.n;
+	let endp = req.query.e;
+	console.log(domname, endp)
+	dt.setEndpoint(domname, endp);
+});
+
 
 // route middleware to validate :name
 router.param('name', function(req, res, next, name) {

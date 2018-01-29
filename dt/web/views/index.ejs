@@ -69,7 +69,7 @@ opacity: .9;
            <!-- <input id="domain" type="text" class="form-control" placeholder="ex. potato.dom"> -->
            <span class="input-group-btn">
              <button id="go" class="btn btn-default" type="button">Register A Domain</button>
-              <button id="go" class="btn btn-default" type="button">Set Endpoint</button>
+              <button id="end" class="btn btn-default" type="button">Set Endpoint</button>
            </span>
 
          </div><!-- /input-group -->
@@ -90,6 +90,28 @@ opacity: .9;
 
 $('#go').click(function () {
   window.location.href = '/registerdomain';
+  // alert('this will hit /register?n=POTATO');
+  // var d = $('#domain').val();
+  // $.get( "/register?n=" + d, function( data ) {
+  // //$( ".result" ).html( data );
+  // console.log(data);
+  // $('#res').html('<br/><div id="ret"></div>');
+  // $('#ret').append('<h5>' + d + '</h5><hr>');
+  // $('#ret').append('<br/>Hash: <pre>' + data + '</pre>');
+  // // $('#ret').append('<br/>Account:  <pre>' + data.account + '</pre>');
+  // // $('#ret').append('<br/>Contract Address: <pre>' + data.contractAddress + '</pre>');
+  // // $('#ret').append('<br/>Gass Price: <pre>' + data.gassPrice + '</pre>');
+  // // $('#ret').append('<br/>Gass Limit:  <pre>' + data.gasslimit + '</pre>');
+  // // $('#ret').append('<br/>Number: <pre>' + data.number + '</pre>');
+  // $('#box').append('<p></p>');
+  // $('#box').append('<p></p>');
+  // $('#ret').append('<p>Check your registrations <a href="https://rinkeby.etherscan.io/address/0x04d45fc663e5bb101607e6fb74b26a920ae579a0">here.</a></p>');
+  // $('#box').append('<p></p>');
+// });
+});
+
+$('#end').click(function () {
+  window.location.href = '/setendpoint';
   // alert('this will hit /register?n=POTATO');
   // var d = $('#domain').val();
   // $.get( "/register?n=" + d, function( data ) {
