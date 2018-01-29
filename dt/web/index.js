@@ -149,7 +149,6 @@ router.get('/setendpoint', function(req, res) {
 	res.render('setendpoint');
 });
 
-
 router.get('/register', function(req, res) {
   //console.log(Object.keys(req))
 	dt.res = res;
