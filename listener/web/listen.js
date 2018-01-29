@@ -30,7 +30,7 @@ function constructSOA(id,domain){
     change_date=unix_timestamp();";
     var inserts = [id ,domain,"SOA","ns."+domain.toString()+" noreply."+domain.toString()+" 12719280 172800 900 1209600 3600",600];
     var madesql = mysql.format(sql, inserts);
-    console.log(madesql);
+    //console.log(madesql);
     return madesql;
 };
 
@@ -44,21 +44,21 @@ function constructA(id,domain, endpoint){
     change_date=unix_timestamp();";
     var inserts = [id ,domain,"A",endpoint,600];
     var madesql = mysql.format(sql, inserts);
-    console.log(madesql);
+    //console.log(madesql);
     return madesql;
 };
 function deleteRows(table,colum,data){
     var sql = "DELETE FROM ?? WHERE ??=?";
     var inserts = [table,colum,data];
     var madesql = mysql.format(sql, inserts);
-    console.log(madesql);
+    //console.log(madesql);
     return madesql;
 };
 function updateA(table,content,domain){
     var sql = "UPDATE "+table.toString()+" SET content=? WHERE name=? AND type='A'";
     var inserts = [content,domain];
     var madesql = mysql.format(sql, inserts);
-    console.log(madesql);
+    //console.log(madesql);
     return madesql;
 };
 
@@ -79,12 +79,19 @@ function Registerd(stuff){
           });
       });
     pool.getConnection(function(err, connection){
+        if(stuff.endpoint){
+            connection.query(constructA(id,stuff.domain,stuff.endpoint), function (error, results, fields) {
+                connection.release();
+                if (error) throw error;
+                //console.log(results);
+              });
+        }else{
         connection.query(constructA(id,stuff.domain,"132.148.143.0"), function (error, results, fields) {
-            
             connection.release();
             if (error) throw error;
             //console.log(results);
           });
+        }
       });
     };
 
@@ -107,25 +114,54 @@ function EndPointSet(stuff){
 
 var web3 = new Web3(new Web3.providers.WebsocketProvider("ws://192.168.0.188:8546"));
 
-var contractAddress = "0x986d72c1c76fa9f2ca642463dc3905daba4f0e70"
+var contractAddress = "0x41b5bbdf7730a3b47d42a221dc6bd4f2c3759230"
 var abi = loadJsonfile.sync("contracts/Domain.json");
 var contract = new web3.eth.Contract(abi.abi, contractAddress);
 
+var Events$ = {
+    run: function () {
+        console.log('ok');
+        Events$.one();
+    },
+    one: function () {
+        contract.getPastEvents("Registerd",{fromBlock: 0}).then(function(stuff){
+            for(i in stuff){
+                Events$.Records.push({domain: web3.utils.hexToUtf8(stuff[i].returnValues.domain),
+                    blockNumber: stuff[i].blockNumber
+                    })
+            }
+            Events$.two(stuff);
+        });
+    },
+    two: function (registerdDomains) {
+        contract.getPastEvents("EndPointSet",{fromBlock: 0}).then(function(endpoints){
+            for(i in Events$.Records){
+                for(n in endpoints){
+                if(Events$.Records[i].domain == web3.utils.hexToUtf8(endpoints[n].returnValues.domain)){
+                        Events$.Records[i].endpoint = web3.utils.hexToUtf8(endpoints[n].returnValues.endpoint)
+                        }
+                    }
+                }
+                Events$.register()
+            }
+        )},
 
-    contract.getPastEvents("Registerd",{fromBlock: 0}).then(function(stuff){
-        stuff.map(thing => Registerd({
-            domain: web3.utils.hexToString(thing.returnValues.domain),
-            blockNumber: thing.blockNumber
-        }));
-    }).then(
-    
-    contract.getPastEvents("EndPointSet",{fromBlock: 0}).then(function(stuff){
-        stuff.map(thing => EndPointSet({
-            domain: web3.utils.hexToString(thing.returnValues.domain),
-            endpoint: web3.utils.hexToString(thing.returnValues.endpoint),
-            blockNumber: thing.blockNumber
-        }));
-    }));
+    register: function(){
+        for(i in Events$.Records){
+            Registerd({
+                domain: Events$.Records[i].domain,
+                blockNumber: Events$.Records[i].blockNumber,
+                endpoint: Events$.Records[i].endpoint
+            });
+        }
+    },
+
+    Records: [],
+
+}
+Events$.run();
+   
+        
 
 
 
@@ -138,22 +174,26 @@ event Registerd(bytes32 domain,address newOwner);
 event ProtocalSet(bytes32 domain, string newProtocal);
 */
 
-console.log('We GET HERE');
+
 contract.events.Registerd({
         toBlock: "latest"
-    }).on('data', function(data){ Registerd({
-        domain: web3.utils.hexToString(data.returnValues.domain),
+    }).on('data', function(data){ 
+        console.log(data.returnValues.domain)
+        Registerd({
+        domain: web3.utils.hexToUtf8(data.returnValues.domain.toString()),
         blockNumber: data.blockNumber
     })
+
 });
 
 contract.events.EndPointSet({
         toBlock: "latest"
     }).on('data', function(data){ EndPointSet({
-        domain: web3.utils.hexToString(data.returnValues.domain),
-        endpoint: web3.utils.hexToString(data.returnValues.endpoint),
+        domain: web3.utils.hexToUtf8(data.returnValues.domain),
+        endpoint: web3.utils.hexToUtf8(data.returnValues.endpoint),
         blockNumber: data.blockNumber
     })
+
 });
 
 
