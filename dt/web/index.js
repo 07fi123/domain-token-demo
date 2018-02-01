@@ -81,13 +81,27 @@ var dt = {
 	signAndSend: function (transactionObj, prvtkey) {
 	    web3.eth.accounts.signTransaction(transactionObj, prvtkey).then(function (tx) {
 	        web3.eth.sendSignedTransaction(tx.rawTransaction)
-	            .on('error', console.log)
+	            .on('error', function (err) {
+								dt.errorHandle(err)
+							})
 	            .on('transactionHash', function (data) {
 								console.log(data)
 								dt.res.json(data)
 								return data;
 							});
 	    });
+	},
+	errorHandle: (err) => {
+		//console.log(typeof err)
+		// console.log(Object.keys(err))
+		// console.log(Object.getOwnPropertyNames(err))
+		//console.log(err.stack)
+		console.log(err.message)
+		console.log(typeof err.message)
+		let errtype = err.message
+
+		//conditional logic?
+		console.log(errtype.slice(19,32))
 	},
 	GenerateTransaction: function (account, contractAddress, gasslimit, gassPrice, callABI, n) {
 		var transactionObj = {
