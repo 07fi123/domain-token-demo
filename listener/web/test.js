@@ -8,7 +8,6 @@ var contractAddress = "0x986d72c1c76fa9f2ca642463dc3905daba4f0e70"
 var abi = loadJsonfile.sync("contracts/Domain.json");
 var contract = new web3.eth.Contract(abi.abi, contractAddress);
 
-console.log(web3.utils.hexToUtf8("0x316d656d65732e646f6d00000000000000000000000000000000000000000000")+"\'");
 
 
 

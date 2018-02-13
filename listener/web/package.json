@@ -4,7 +4,8 @@
   "description": "Domain linkage between Domain Token Contract on blockchain and our DNS server",
   "main": "listen.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node listen.js"
   },
   "author": "Embermine Inc",
   "license": "GPL-3.0",

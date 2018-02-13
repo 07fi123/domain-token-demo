@@ -112,7 +112,7 @@ function EndPointSet(stuff){
 // Set the ethereum provider 
 //var provider = "http://rinkeby.infura.io/NtYoKkfvdD1zQtoHJUNa/v1/";
 
-var web3 = new Web3(new Web3.providers.WebsocketProvider("ws://192.168.0.188:8546"));
+var web3 = new Web3(new Web3.providers.WebsocketProvider("ws://18.218.30.92:8546"));
 
 var contractAddress = "0x41b5bbdf7730a3b47d42a221dc6bd4f2c3759230"
 var abi = loadJsonfile.sync("contracts/Domain.json");
