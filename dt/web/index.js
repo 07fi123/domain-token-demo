@@ -14,35 +14,94 @@ var port    = 	process.env.PORT || 8080;
 
 global.debug = false;
 
-// var contractAddress = "0x986d72c1c76fa9f2ca642463dc3905daba4f0e70"
-// var abi = loadJsonfile.sync("contracts/DomainToken.json");
-// var contract = new web3.eth.Contract(abi.abi, contractAddress);
-// //Our private Key
-// var prvtkey = '0x12572bd989563280117df618b15366be46affbd44b7cd53e42ecf65818188d0b';
-// //Wallet to get info from
-// var account = '0x04d45Fc663e5bB101607e6fb74B26A920ae579A0';
-// //Wallet to send to
-// //Token Address
-// var contractAddress = '0x986d72c1c76fa9f2ca642463dc3905daba4f0e70';
-// //Amount per token
-// // gass limit
-// var gasslimit = new web3.utils.BN("2501510");
-// //gass price                       8003898
-// var gassPrice = new web3.utils.BN("21000000000");
+
+//TODO: remove these
+var contractAddress = "0x986d72c1c76fa9f2ca642463dc3905daba4f0e70"
+var abi = loadJsonfile.sync("contracts/DomainToken.json");
+var contract = new web3.eth.Contract(abi.abi, contractAddress);
+//Our private Key
+var prvtkey = '0x12572bd989563280117df618b15366be46affbd44b7cd53e42ecf65818188d0b';
+//Wallet to get info from
+var account = '0x04d45Fc663e5bB101607e6fb74B26A920ae579A0';
+//Wallet to send to
+//Token Address
+var contractAddress = '0x41b5bbdf7730a3b47d42a221dc6bd4f2c3759230';
+//Amount per token
+// gass limit
+var gasslimit = new web3.utils.BN("2501510");
+//gass price                       8003898
+var gassPrice = new web3.utils.BN("21000000000");
 
 
 
-dt = {
+var dt = {
+	init: function () {
+		dt.contract = new web3.eth.Contract(dt.config.abi.abi, dt.config.contractAddress);
+		console.log(dt.config.contract);
+		return 0
+	},
 	config: {
 		abi: loadJsonfile.sync('contracts/DomainToken.json'),
 		prvtkey: '0x12572bd989563280117df618b15366be46affbd44b7cd53e42ecf65818188d0b',
 		account: '0x04d45Fc663e5bB101607e6fb74B26A920ae579A0',
-		contractAddress: '0x986d72c1c76fa9f2ca642463dc3905daba4f0e70',
-		contract: new web3.eth.Contract(dt.config.abi.abi, dt.config.contractAddress),
+		contractAddress: '0x41b5bbdf7730a3b47d42a221dc6bd4f2c3759230',
+		contract: '',
 		gasslimit: new web3.utils.BN("2501510"),
 		gassPrice: new web3.utils.BN("21000000000")
 		// console.log(web3.utils.fromWei(gasslimit,"ether"));
 		// console.log(web3.utils.fromWei(gassPrice,"gwei"));
+	},
+	register: function (domname) {
+		var callABI = contract.methods.register(web3.utils.toHex(domname)).encodeABI();
+		// let endpoint = '100.' + Math.random(200) + '.100.' + '0.1';
+		// callABI2 = contract.methods.setEndpoint(web3.utils.toHex(domname),web3.utils.toHex(endpoint)).encodeABI();
+		web3.eth.getTransactionCount(dt.config.account)
+				.then(function (n) {
+						console.log(n);
+						var n = new BN(n.toString());
+						var number = n.toNumber();
+						// var _w3 = { dt.config.account, dt.config.contractAddress, dt.config.gasslimit, dt,.config gassPrice, callABI, number }
+						dt.signAndSend(dt.GenerateTransaction(account, contractAddress, gasslimit, gassPrice, callABI, number), prvtkey);
+		});
+	},
+	setEndpoint: function (domname, endpoint) {
+		// var callABI = contract.methods.register(web3.utils.toHex(domname)).encodeABI();
+		// let endpoint = '100.' + Math.random(200) + '.100.' + '0.1';
+		var callABI = contract.methods.setEndpoint(web3.utils.toHex(domname),web3.utils.toHex(endpoint)).encodeABI();
+		web3.eth.getTransactionCount(dt.config.account)
+				.then(function (n) {
+						console.log(n);
+						var n = new BN(n.toString());
+						var number = n.toNumber();
+						// var _w3 = { dt.config.account, dt.config.contractAddress, dt.config.gasslimit, dt,.config gassPrice, callABI, number }
+						dt.signAndSend(dt.GenerateTransaction(account, contractAddress, gasslimit, gassPrice, callABI, number), prvtkey);
+		});
+	},
+	//Sign and send transactions
+	signAndSend: function (transactionObj, prvtkey) {
+	    web3.eth.accounts.signTransaction(transactionObj, prvtkey).then(function (tx) {
+	        web3.eth.sendSignedTransaction(tx.rawTransaction)
+	            .on('error', function (err) {
+								dt.errorHandle(err)
+							})
+	            .on('transactionHash', function (data) {
+								console.log(data)
+								dt.res.json(data)
+								return data;
+							});
+	    });
+	},
+	errorHandle: (err) => {
+		//console.log(typeof err)
+		// console.log(Object.keys(err))
+		// console.log(Object.getOwnPropertyNames(err))
+		//console.log(err.stack)
+		console.log(err.message)
+		console.log(typeof err.message)
+		let errtype = err.message
+
+		//conditional logic?
+		console.log(errtype.slice(19,32))
 	},
 	GenerateTransaction: function (account, contractAddress, gasslimit, gassPrice, callABI, n) {
 		var transactionObj = {
@@ -58,32 +117,10 @@ dt = {
 				console.log(transactionObj);
 		}
 		return transactionObj;
-	},
-	//Sign and send transactions
-	signAndSend: function (transactionObj, prvtkey) {
-	    web3.eth.accounts.signTransaction(transactionObj, prvtkey).then(function (tx) {
-	        web3.eth.sendSignedTransaction(tx.rawTransaction)
-	            .on('error', console.log)
-	            .on('transactionHash', function (data) {
-								console.log(data)
-								dt.res.json(data)
-								return data;
-							});
-	    });
-	},
-	register: function (domname) {
-		var callABI = contract.methods.register(web3.utils.toHex(domname)).encodeABI();
-		//var callABI2 = contract.methods.setEndpoint(web3.utils.toHex(domname),web3.utils.tohex(endpoint)).encodeABI();
-	  web3.eth.getTransactionCount(account)
-	      .then(function (n) {
-	          console.log(n);
-	          var n = new BN(n.toString());
-	          var number = n.toNumber();
-						var _w3 = { account, contractAddress, gasslimit, gassPrice, callABI, number }
-						dt.signAndSend(dt.GenerateTransaction(account, contractAddress, gasslimit, gassPrice, callABI, number), prvtkey);
-	  });
 	}
 }
+
+app.use(express.static('public'))
 
 // ROUTES
 // ==============================================
@@ -117,19 +154,32 @@ router.get('/', function(req, res) {
 });
 
 
+// home page route (http://localhost:8080)
+router.get('/registerdomain', function(req, res) {
+	res.render('registerdomain');
+});
 
-// about page route (http://localhost:8080/about)
+router.get('/setendpoint', function(req, res) {
+	res.render('setendpoint');
+});
+
 router.get('/register', function(req, res) {
   //console.log(Object.keys(req))
 	dt.res = res;
   let domname = req.query.n;
 	dt.register(domname);
-	if (dt.spare != '') {
-		console.log(dt.spare)
-		res.json(dt.spare);
-	}
-
 });
+
+router.get('/setend', function(req, res) {
+  //console.log(Object.keys(req))
+	dt.res = res;
+	console.log(req.query)
+  let domname = req.query.n;
+	let endp = req.query.e;
+	console.log(domname, endp)
+	dt.setEndpoint(domname, endp);
+});
+
 
 // route middleware to validate :name
 router.param('name', function(req, res, next, name) {
@@ -165,15 +215,11 @@ app.route('/login')
 		console.log('processing');
 		res.send('processing the login form!');
 	});
-
+dt.init();
 // START THE SERVER
 // ==============================================
 app.listen(port);
 console.log('Magic happens on port ' + port);
-
-
-
-
 
 /* Generate Transaction LIst
 export function generateTransactionList(walletfrom,walletto,tokaddress,amount,gasslimit,gassPrice,n){

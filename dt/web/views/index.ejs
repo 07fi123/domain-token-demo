@@ -9,6 +9,7 @@
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans|Roboto" rel="stylesheet">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- Leave those next 4 lines if you care about users using IE8 -->
@@ -17,53 +18,17 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-<style>
-body {
-  background: #191919;
-  font-family: 'Open Sans', sans-serif;
-}
-
-h1,h2,h3,h4,h5,h6 {
-  font-family: 'Roboto', sans-serif;
-}
-
-.jumbotron {
-background: #fff;
-margin-top: 26%;
-height: 50%;
-opacity: .9;
-}
-
-.jumbotron p {
-  font-size: 8pt;
-}
-
-.input-group {
-  padding: 3em;
-}
-
-#domain {
-  width: 80%;
-}
-
-#ret {
-  width: 80%;
-  margin: 0 auto;
-  padding: 2em;
-  background: #EBDECB;
-  color: #000;
-}
-
-</style>
   </head>
   <body>
 <div class="container">
     <div id="box" class="jumbotron">
-      <h3>Register Your Domain</h3>
+<img class="logo" src="http://www.domaintoken.io/wp-content/uploads/2017/12/Domain-Token-Logofull.png"/>
+
          <div class="input-group">
-           <input id="domain" type="text" class="form-control" placeholder="ex. potato.dom">
+           <!-- <input id="domain" type="text" class="form-control" placeholder="ex. potato.dom"> -->
            <span class="input-group-btn">
-             <button id="go" class="btn btn-default" type="button">Go!</button>
+             <button id="go" class="btn btn-default" type="button">Register A Domain</button>
+              <button id="end" class="btn btn-default" type="button">Set Endpoint</button>
            </span>
 
          </div><!-- /input-group -->
@@ -83,24 +48,47 @@ opacity: .9;
   console.log($);
 
 $('#go').click(function () {
+  window.location.href = '/registerdomain';
   // alert('this will hit /register?n=POTATO');
-  var d = $('#domain').val();
-  $.get( "/register?n=" + d, function( data ) {
-  //$( ".result" ).html( data );
-  console.log(data);
-  $('#res').html('<br/><div id="ret"></div>');
-  $('#ret').append('<h3>' + d + '</h3><hr>');
-  $('#ret').append('<br/>ABI: <pre>' + data.callABI + '</pre>');
-  $('#ret').append('<br/>Account:  <pre>' + data.account + '</pre>');
-  // $('#ret').append('<br/>Contract Address: <pre>' + data.contractAddress + '</pre>');
-  // $('#ret').append('<br/>Gass Price: <pre>' + data.gassPrice + '</pre>');
-  // $('#ret').append('<br/>Gass Limit:  <pre>' + data.gasslimit + '</pre>');
-  // $('#ret').append('<br/>Number: <pre>' + data.number + '</pre>');
-  $('#box').append('<p></p>');
-  $('#box').append('<p></p>');
-  $('#ret').append('<p>Check your registrations <a href="https://rinkeby.etherscan.io/address/0x04d45fc663e5bb101607e6fb74b26a920ae579a0">here.</a></p>');
-  $('#box').append('<p></p>');
+  // var d = $('#domain').val();
+  // $.get( "/register?n=" + d, function( data ) {
+  // //$( ".result" ).html( data );
+  // console.log(data);
+  // $('#res').html('<br/><div id="ret"></div>');
+  // $('#ret').append('<h5>' + d + '</h5><hr>');
+  // $('#ret').append('<br/>Hash: <pre>' + data + '</pre>');
+  // // $('#ret').append('<br/>Account:  <pre>' + data.account + '</pre>');
+  // // $('#ret').append('<br/>Contract Address: <pre>' + data.contractAddress + '</pre>');
+  // // $('#ret').append('<br/>Gass Price: <pre>' + data.gassPrice + '</pre>');
+  // // $('#ret').append('<br/>Gass Limit:  <pre>' + data.gasslimit + '</pre>');
+  // // $('#ret').append('<br/>Number: <pre>' + data.number + '</pre>');
+  // $('#box').append('<p></p>');
+  // $('#box').append('<p></p>');
+  // $('#ret').append('<p>Check your registrations <a href="https://rinkeby.etherscan.io/address/0x04d45fc663e5bb101607e6fb74b26a920ae579a0">here.</a></p>');
+  // $('#box').append('<p></p>');
+// });
 });
+
+$('#end').click(function () {
+  window.location.href = '/setendpoint';
+  // alert('this will hit /register?n=POTATO');
+  // var d = $('#domain').val();
+  // $.get( "/register?n=" + d, function( data ) {
+  // //$( ".result" ).html( data );
+  // console.log(data);
+  // $('#res').html('<br/><div id="ret"></div>');
+  // $('#ret').append('<h5>' + d + '</h5><hr>');
+  // $('#ret').append('<br/>Hash: <pre>' + data + '</pre>');
+  // // $('#ret').append('<br/>Account:  <pre>' + data.account + '</pre>');
+  // // $('#ret').append('<br/>Contract Address: <pre>' + data.contractAddress + '</pre>');
+  // // $('#ret').append('<br/>Gass Price: <pre>' + data.gassPrice + '</pre>');
+  // // $('#ret').append('<br/>Gass Limit:  <pre>' + data.gasslimit + '</pre>');
+  // // $('#ret').append('<br/>Number: <pre>' + data.number + '</pre>');
+  // $('#box').append('<p></p>');
+  // $('#box').append('<p></p>');
+  // $('#ret').append('<p>Check your registrations <a href="https://rinkeby.etherscan.io/address/0x04d45fc663e5bb101607e6fb74b26a920ae579a0">here.</a></p>');
+  // $('#box').append('<p></p>');
+// });
 });
 
   </script>
