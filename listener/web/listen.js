@@ -2,12 +2,12 @@ var Web3 = require('web3');
 var loadJsonfile = require("load-json-file");
 var async = require('async');
 
-
+process.env.paramApiKey
 //Mysql Setup
 var mysql = require('mysql');
 var pool = mysql.createPool({
   connectionLimit : 15,
-  host     : 'localhost',
+  host     : process.env.MYSQL_HOST,
   user     : 'root',
   password : 'powerdns',
   database : 'powerdns'
@@ -112,7 +112,7 @@ function EndPointSet(stuff){
 // Set the ethereum provider 
 //var provider = "http://rinkeby.infura.io/NtYoKkfvdD1zQtoHJUNa/v1/";
 
-var web3 = new Web3(new Web3.providers.WebsocketProvider("ws://18.218.30.92:8546"));
+var web3 = new Web3(new Web3.providers.WebsocketProvider(process.env.GETH_HOST));
 
 var contractAddress = "0x41b5bbdf7730a3b47d42a221dc6bd4f2c3759230"
 var abi = loadJsonfile.sync("contracts/Domain.json");
@@ -162,9 +162,6 @@ var Events$ = {
 Events$.run();
    
         
-
-
-
 
 
 /*
