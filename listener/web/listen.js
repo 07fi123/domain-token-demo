@@ -2,9 +2,9 @@ var Web3 = require('web3');
 var loadJsonfile = require("load-json-file");
 var async = require('async');
 
-process.env.paramApiKey
 //Mysql Setup
 var mysql = require('mysql');
+
 var pool = mysql.createPool({
   connectionLimit : 15,
   host     : process.env.MYSQL_HOST,
@@ -120,7 +120,7 @@ var contract = new web3.eth.Contract(abi.abi, contractAddress);
 
 var Events$ = {
     run: function () {
-        console.log('ok');
+        console.log('Starting....');
         Events$.one();
     },
     one: function () {
